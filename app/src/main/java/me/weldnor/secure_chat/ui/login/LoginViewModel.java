@@ -1,21 +1,24 @@
 package me.weldnor.secure_chat.ui.login;
 
+import android.content.Context;
+import android.util.Patterns;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import android.util.Patterns;
+import java.io.FileNotFoundException;
 
+import me.weldnor.secure_chat.R;
 import me.weldnor.secure_chat.data.LoginRepository;
 import me.weldnor.secure_chat.data.Result;
 import me.weldnor.secure_chat.data.model.LoggedInUser;
-import me.weldnor.secure_chat.R;
 
 public class LoginViewModel extends ViewModel {
 
-    private MutableLiveData<LoginFormState> loginFormState = new MutableLiveData<>();
-    private MutableLiveData<LoginResult> loginResult = new MutableLiveData<>();
-    private LoginRepository loginRepository;
+    private final MutableLiveData<LoginFormState> loginFormState = new MutableLiveData<>();
+    private final MutableLiveData<LoginResult> loginResult = new MutableLiveData<>();
+    private final LoginRepository loginRepository;
 
     LoginViewModel(LoginRepository loginRepository) {
         this.loginRepository = loginRepository;
@@ -29,15 +32,19 @@ public class LoginViewModel extends ViewModel {
         return loginResult;
     }
 
-    public void login(String username, String password) {
-        // can be launched in a separate asynchronous job
-        Result<LoggedInUser> result = loginRepository.login(username, password);
-
+    public void login(String username, String password, Context context) throws FileNotFoundException {
+        Result result = loginRepository.login(username, password, context);
+        // В случае успешного входа
         if (result instanceof Result.Success) {
             LoggedInUser data = ((Result.Success<LoggedInUser>) result).getData();
-            loginResult.setValue(new LoginResult(new LoggedInUserView(data.getDisplayName())));
-        } else {
-            loginResult.setValue(new LoginResult(R.string.login_failed));
+            // Получаем дополнительные данные пользователя (например, число)
+            Integer customData = 1;
+            // Формируем данные в структуру, для передачи в главное окно
+            LoggedInUserView userData = new LoggedInUserView(data.getDisplayName(), customData);
+            loginResult.setValue(new LoginResult(userData));
+        } else if (result instanceof Result.Error) {
+            // В случае неудачного входа передаем сообщение об ошибке
+            loginResult.setValue(new LoginResult(((Result.Error) result).getError()));
         }
     }
 

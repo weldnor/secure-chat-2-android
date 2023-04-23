@@ -1,11 +1,12 @@
 package me.weldnor.secure_chat.ui.login;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.annotation.NonNull;
 
 import me.weldnor.secure_chat.data.LoginDataSource;
 import me.weldnor.secure_chat.data.LoginRepository;
+
 
 /**
  * ViewModel provider factory to instantiate LoginViewModel.
