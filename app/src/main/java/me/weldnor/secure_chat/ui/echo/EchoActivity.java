@@ -1,4 +1,4 @@
-package me.weldnor.secure_chat;
+package me.weldnor.secure_chat.ui.echo;
 
 import android.os.Bundle;
 import android.widget.Button;
@@ -15,9 +15,10 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 
+import me.weldnor.secure_chat.R;
 import me.weldnor.secure_chat.utils.EasyAES;
 
-public class MainActivity extends AppCompatActivity {
+public class EchoActivity extends AppCompatActivity {
     private static final String SERVER_HOST = "http://10.0.2.2:80";
     public static final String SECRET_KEY = "SUPER_SECRET_KEY";
 
@@ -29,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_echo);
 
         oututTextView = findViewById(R.id.labOut);
         inputTextEdit = findViewById(R.id.tbData);
