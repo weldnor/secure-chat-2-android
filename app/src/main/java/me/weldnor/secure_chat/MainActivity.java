@@ -15,8 +15,11 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 
+import me.weldnor.secure_chat.utils.EasyAES;
+
 public class MainActivity extends AppCompatActivity {
     private static final String SERVER_HOST = "http://10.0.2.2:80";
+    public static final String SECRET_KEY = "SUPER_SECRET_KEY";
 
     private TextView oututTextView;
     private EditText inputTextEdit;
@@ -34,11 +37,14 @@ public class MainActivity extends AppCompatActivity {
 
         sendButton.setOnClickListener(v -> {
             String message = inputTextEdit.getText().toString();
+            EasyAES easyAES = new EasyAES(SECRET_KEY);
+            String encryptedMessage = easyAES.encrypt(message);
+
 
             Thread thread = new Thread(() -> {
                 HttpURLConnection conn = null;
                 try {
-                    conn = openConnection(message);
+                    conn = openConnection(encryptedMessage);
                     processConnection(conn);
 
                 } catch (IOException e) {
